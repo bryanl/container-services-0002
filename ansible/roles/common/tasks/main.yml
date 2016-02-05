@@ -6,4 +6,8 @@
 - name: add do_repo repository
   apt_repository: repo="deb [arch=amd64] http://do-repo.x.pifft.com trusty main" update_cache=yes state=present
 
+- name: add kismatic key
+  apt_key: keyserver=keyserver.ubuntu.com id=834BE34E616EE0EE20A5003A5C919141D83BE32B
 
+- name: add kismatic repository
+  apt_repository: repo="deb [arch=amd64] https://repos.kismatic.com/debian trusty main" update_cache=yes state=present

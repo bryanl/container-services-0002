@@ -1,0 +1,10 @@
+{% macro apiServers() -%}
+{% for host in groups[kubernetes_master_group] -%}
+  {% if loop.last %}
+{{ hostvars[host]['ansible_' + kubernetes_server_interface]['ipv4']['address'] }}:{{ kubernetes_server_port }}
+  {%- else -%}
+{{ hostvars[host]['ansible_' + kubernetes_server_interface]['ipv4']['address'] }}:{{ kubernetes_server_port }},
+  {%- endif -%}
+{% endfor -%}
+{% endmacro %}
+DAEMON_ARGS="$DAEMON_ARGS --api_servers={{ apiServers() }} --address=0.0.0.0 --port=10250 --healthz-bind-address=0.0.0.0 --allow_privileged=False --config=/etc/kubernetes/manifests

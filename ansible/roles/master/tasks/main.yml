@@ -9,3 +9,14 @@
 - name: start etcd
   service: name=etcd state=started
 
+- name: install kubernetes master
+  apt: name=kubernetes-master state=present cache_valid_time=3600
+
+- name: start kube-apiserver
+  service: name=kube-apiserver state=started
+
+- name: start kube-controller-manager
+  service: name=kube-controller-manager state=started
+
+- name: start kube-scheduler
+  service: name=kube-scheduler state=started

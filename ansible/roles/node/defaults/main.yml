@@ -1,0 +1,4 @@
+---
+kubernetes_master_group: master
+kubernetes_server_interface: eth1
+kubernetes_server_port: 8080

@@ -1,0 +1,8 @@
+---
+- name: install kubernetes-node
+  apt: name=kubernetes-node state=present cache_valid_time=3600
+
+- name: install kubelet configuration
+  template: src=etc/default/kubelet.j2 dest=/etc/default/kubelet
+  notify:
+    - restart kubelet

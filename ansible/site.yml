@@ -14,6 +14,7 @@
   roles:
     - common
     - flannel
+    - node
 
 - name: configure flannel
   hosts: master.0
@@ -21,8 +22,9 @@
   tasks:
     - name: check for configuration
       register: key_check
+      changed_when: False
       command: >
-        etcdctl get /coreos.com/network/config
+        etcdctl get /coreos.com/network/config > /dev/null
     - name: set configuration
       when: key_check | failed
       command: >
