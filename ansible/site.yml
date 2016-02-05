@@ -6,9 +6,25 @@
   roles:
     - common
     - master
+    - flannel
 
 - name: k8s node
   hosts: node
 
   roles:
     - common
+    - flannel
+
+- name: configure flannel
+  hosts: master.0
+
+  tasks:
+    - name: check for configuration
+      register: key_check
+      command: >
+        etcdctl get /coreos.com/network/config
+    - name: set configuration
+      when: key_check | failed
+      command: >
+        etcdctl set /coreos.com/network/config '{ "Network": "172.18.0.0/16", "Backend": { "Type": "udp" } }'
+

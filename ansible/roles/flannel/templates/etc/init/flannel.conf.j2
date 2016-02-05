@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+
+description "flannel"
+author "Bryan Liles <bryanliles@gmail.com"
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+{% macro etcd_endpoints() -%}
+{% for host in groups[etcd_cluster_group] -%}
+  {% if loop.last %}
+{{ etcd_client_url_scheme }}://{{ hostvars[host]['ansible_' + etcd_client_interface]['ipv4']['address'] }}:{{ etcd_client_port }}
+  {%- else -%}
+{{ etcd_client_url_scheme }}://{{ hostvars[host]['ansible_' + etcd_client_interface]['ipv4']['address'] }}:{{ etcd_client_port }},
+  {%- endif -%}
+{% endfor -%}
+{% endmacro %}
+
+env FLANNELD_ETCD_ENDPOINTS={{ etcd_endpoints() }}
+env FLANNELD_IFACE={{ etcd_client_interface }}
+
+script
+  /usr/bin/flanneld
+end script

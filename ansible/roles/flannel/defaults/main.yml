@@ -1,0 +1,7 @@
+---
+etcd_cluster_group: master
+etcd_client_url_scheme: http
+etcd_client_port: 2379
+etcd_client_interface: eth1
+
+

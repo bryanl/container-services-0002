@@ -1,0 +1,10 @@
+---
+- name: install flannel
+  apt: name=flannel update_cache=yes state=present cache_valid_time=3600
+
+- name: create flannel configuration
+  template: src=etc/init/flannel.conf.j2 dest=/etc/init/flannel.conf
+  notify: restart flannel
+
+- name: start flannel
+  service: name=flannel state=started
