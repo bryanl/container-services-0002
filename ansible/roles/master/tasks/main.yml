@@ -1,0 +1,11 @@
+---
+- name: install etcd
+  apt: name=etcd update_cache=yes state=present cache_valid_time=3600
+
+- name: create etcd configuration
+  template: src=etc/init/etcd.conf.j2 dest=/etc/init/etcd.conf
+  notify: restart etcd
+
+- name: start etcd
+  service: name=etcd state=started
+

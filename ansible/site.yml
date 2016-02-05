@@ -5,6 +5,7 @@
 
   roles:
     - common
+    - master
 
 - name: k8s node
   hosts: node

@@ -1,0 +1,12 @@
+---
+etcd_name: "{{ hostvars[inventory_hostname]['name'] }}"
+etcd_data_dir: /var/cache/etcd
+etcd_client_listen_url: "{{ etcd_client_url_scheme}}://{{ hostvars[inventory_hostname]['ansible_' + etcd_peer_interface]['ipv4']['address'] }}:{{ etcd_client_port }}"
+etcd_peer_listen_url: "{{ etcd_peer_url_scheme}}://{{ hostvars[inventory_hostname]['ansible_' + etcd_peer_interface]['ipv4']['address'] }}:{{ etcd_peer_port }}"
+
+etcd_client_port: 2379
+etcd_peer_port: 2380
+etcd_peers_group: master
+etcd_peer_url_scheme: http
+etcd_client_url_scheme: http
+etcd_peer_interface: eth1

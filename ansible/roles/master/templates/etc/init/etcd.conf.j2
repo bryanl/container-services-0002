@@ -1,0 +1,45 @@
+# {{ ansible_managed }}
+
+description "etcd"
+author "Bryan Liles <bryanliles@gmail.com>"
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+{% macro initial_cluster() -%}
+{% for host in groups[etcd_peers_group] -%}
+  {% if loop.last %}
+{{ hostvars[host]['name'] }}={{ etcd_peer_url_scheme }}://{{ hostvars[host]['ansible_' + etcd_peer_interface]['ipv4']['address'] }}:{{ etcd_peer_port }}
+  {%- else -%}
+{{ hostvars[host]['name'] }}={{ etcd_peer_url_scheme }}://{{ hostvars[host]['ansible_' + etcd_peer_interface]['ipv4']['address'] }}:{{ etcd_peer_port }},
+  {%- endif -%}
+{% endfor -%}
+{% endmacro %}
+
+env ETCD_NAME={{ etcd_name }}
+env ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:{{ etcd_client_port }},{{ etcd_client_listen_url }}
+env ETCD_ADVERTISE_CLIENT_URLS=http://127.0.0.1:{{ etcd_client_port }},{{ etcd_client_listen_url }}
+env ETCD_LISTEN_PEER_URLS={{ etcd_peer_listen_url }}
+env ETCD_ADVERTISE_PEER_URLS={{ etcd_peer_listen_url }}
+env ETCD_INITIAL_ADVERTISE_PEER_URLS={{ etcd_peer_listen_url }}
+env ETCD_INITIAL_CLUSTER={{ initial_cluster() }}
+env ETCD_INITIAL_CLUSTER_STATE=new
+env ETCD_INITIAL_CLUSTER_TOKEN=k8s-etcd-cluster
+env ETCD_DATA_DIR={{ etcd_data_dir }}
+
+script
+  if [ -f "/etc/default/etcd" ]; then
+    . /etc/default/etcd
+  fi
+
+  mkdir -p /var/cache/etcd
+  chdir /var/cache/etcd
+
+  /usr/bin/etcd --data-dir /var/cache/etcd
+end script
