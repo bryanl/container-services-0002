@@ -19,7 +19,7 @@ resource "digitalocean_droplet" "master" {
 }
 
 resource "digitalocean_droplet" "node" {
-  count = "2"
+  count = "3"
   image = "ubuntu-14-04-x64"
   name = "${var.project}-k8s-node-${count.index+1}"
   region = "${var.region}"
