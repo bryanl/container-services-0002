@@ -1,0 +1,9 @@
+---
+
+- name: add do_repo key
+  apt_key: url=http://do-repo.x.pifft.com/do-repo.key state=present
+
+- name: add do_repo repository
+  apt_repository: repo="deb [arch=amd64] http://do-repo.x.pifft.com trusty main" update_cache=yes state=present
+
+
