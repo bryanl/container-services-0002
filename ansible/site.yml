@@ -1,24 +1,27 @@
 ---
 
-- name: k8s master
-  hosts: master
-
+- name: k8s common
+  hosts: master, node
   roles:
     - common
+
+- name: k8s master
+  hosts: master
+  roles:
     - master
-    - flannel
 
 - name: k8s node
   hosts: node
-
   roles:
-    - common
-    - flannel
     - node
+
+- name: install flannel
+  hosts: master, node
+  roles:
+    - flannel
 
 - name: configure flannel
   hosts: master.0
-
   tasks:
     - name: check for configuration
       register: key_check

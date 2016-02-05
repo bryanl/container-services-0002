@@ -1,4 +1,7 @@
 ---
+- name: install docker
+  apt: name=docker-engine state=present cache_valid_time=3600
+
 - name: install kubernetes-node
   apt: name=kubernetes-node state=present cache_valid_time=3600
 
