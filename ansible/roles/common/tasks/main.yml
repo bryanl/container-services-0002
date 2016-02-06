@@ -17,3 +17,6 @@
 
 - name: add docker repository
   apt_repository: repo="deb https://apt.dockerproject.org/repo ubuntu-trusty main" update_cache=yes state=present
+
+- name: add haproxy ppa
+  apt_repository: repo="ppa:vbernat/haproxy-1.5" update_cache=yes state=present

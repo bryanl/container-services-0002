@@ -1,9 +1,10 @@
 ---
-- name: install docker
-  apt: name=docker-engine state=present cache_valid_time=3600
-
-- name: install kubernetes-node
-  apt: name=kubernetes-node state=present cache_valid_time=3600
+- name: install packages
+  apt: name={{ item }} state=present cache_valid_time=3600
+  with_items:
+    - docker-engine
+    - haproxy
+    - kubernetes-node
 
 - name: install kubelet configuration
   template: src=etc/default/kubelet.j2 dest=/etc/default/kubelet
