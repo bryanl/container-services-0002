@@ -25,7 +25,8 @@
   tasks:
     - name: check for configuration
       register: key_check
-      changed_when: False
+      changed_when: false
+      ignore_errors: true
       command: >
         etcdctl get /coreos.com/network/config > /dev/null
     - name: set configuration
