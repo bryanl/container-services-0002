@@ -10,3 +10,22 @@
   template: src=etc/default/kubelet.j2 dest=/etc/default/kubelet
   notify:
     - restart kubelet
+
+- name: start kubelet service
+  service: name=kubelet state=started
+
+- name: install kube-proxy configuration
+  template: src=etc/default/kube-proxy.j2 dest=/etc/default/kube-proxy
+  notify:
+    - restart kube-proxy
+
+- name: start kube-proxy service
+  service: name=kube-proxy state=started
+
+- name: install haproxy configuration
+  template: src=etc/haproxy/haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+  notify:
+    - restart haproxy
+
+- name: start haproxy service
+  service: name=haproxy state=started

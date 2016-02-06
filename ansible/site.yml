@@ -12,6 +12,8 @@
 
 - name: k8s node
   hosts: node
+  tags:
+    - node
   roles:
     - node
 

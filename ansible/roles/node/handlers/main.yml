@@ -1,3 +1,9 @@
 ---
 - name: restart kubelet
   service: name=kubelet state=restarted
+
+- name: restart kube-proxy
+  service: name=kube-proxy state=restarted
+
+- name: restart haproxy
+  service: name=haproxy state=restarted
