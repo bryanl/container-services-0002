@@ -6,6 +6,11 @@
     - haproxy
     - kubernetes-node
 
+- name: install docker configuration
+  template: src=etc/default/docker.j2 dest=/etc/default/docker
+  notify:
+    - restart docker
+
 - name: install kubelet configuration
   template: src=etc/default/kubelet.j2 dest=/etc/default/kubelet
   notify:
