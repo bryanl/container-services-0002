@@ -12,6 +12,11 @@
 - name: install kubernetes master
   apt: name=kubernetes-master state=present cache_valid_time=3600
 
+- name: create kube-apiserver config
+  template: src=etc/default/kube-apiserver.j2 dest=/etc/default/kube-apiserver
+  notify:
+    - restart kube-apiserver
+
 - name: start kube-apiserver
   service: name=kube-apiserver state=started
 
